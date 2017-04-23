@@ -19,15 +19,15 @@ public class MainTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(MainTest.class);
 
     protected static String getVirtualTopicName() {
-        return "VirtualTopic.TEST";
+        return "VirtualTopic.haha";
     }
 
     protected static String getVirtualTopicConsumerNameA() {
-        return "Consumer.A.VirtualTopic.TEST";
+        return "Consumer.fuck1.VirtualTopic.haha";
     }
 
     protected static String getVirtualTopicConsumerNameB() {
-        return "Consumer.B.VirtualTopic.TEST";
+        return "Consumer.fuck2.VirtualTopic.haha";
     }
 
     @Test
@@ -37,14 +37,16 @@ public class MainTest {
             ActiveMQConnectionFactory factoryA = new ActiveMQConnectionFactory(
                     "tcp://127.0.0.1:61616");
 
-            Queue queue = new ActiveMQQueue(getVirtualTopicConsumerNameA());
+            Queue queueA = new ActiveMQQueue(getVirtualTopicConsumerNameA());
+            Queue queueB = new ActiveMQQueue(getVirtualTopicConsumerNameB());
             ActiveMQConnection conn = (ActiveMQConnection) factoryA.createConnection();
             conn.start();
             Session session = conn.createSession(false, Session.AUTO_ACKNOWLEDGE);
 
-            MessageConsumer consumer1 = session.createConsumer(queue);
-            MessageConsumer consumer2 = session.createConsumer(queue);
-            MessageConsumer consumer3 = session.createConsumer(new ActiveMQQueue(getVirtualTopicConsumerNameB()));
+            MessageConsumer consumer1 = session.createConsumer(queueA);
+            MessageConsumer consumer2 = session.createConsumer(queueA);
+            MessageConsumer consumer3 = session.createConsumer(queueB);
+            MessageConsumer consumer4 = session.createConsumer(queueB);
             final AtomicInteger aint1 = new AtomicInteger(0);
             MessageListener listenerA = message -> {
                 try {
@@ -64,12 +66,12 @@ public class MainTest {
                 }
             };
             consumer3.setMessageListener(listenerB);
+            consumer4.setMessageListener(listenerB);
 
             MessageProducer producer = session.createProducer(new ActiveMQTopic(getVirtualTopicName()));
             int index = 0;
             while (index++ < 100) {
-                TextMessage message = session.createTextMessage(index
-                        + " message.");
+                TextMessage message = session.createTextMessage(index + " message.");
                 producer.send(message);
             }
 

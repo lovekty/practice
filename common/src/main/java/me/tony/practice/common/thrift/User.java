@@ -576,7 +576,7 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
             break;
           case 2: // GENDER
             if (schemeField.type == org.apache.thrift.protocol.TType.I32) {
-              struct.gender = me.tony.practice.thrift.Gender.findByValue(iprot.readI32());
+              struct.gender = me.tony.practice.common.thrift.Gender.findByValue(iprot.readI32());
               struct.setGenderIsSet(true);
             } else { 
               org.apache.thrift.protocol.TProtocolUtil.skip(iprot, schemeField.type);
@@ -662,7 +662,7 @@ public class User implements org.apache.thrift.TBase<User, User._Fields>, java.i
       org.apache.thrift.protocol.TTupleProtocol iprot = (org.apache.thrift.protocol.TTupleProtocol) prot;
       struct.name = iprot.readString();
       struct.setNameIsSet(true);
-      struct.gender = me.tony.practice.thrift.Gender.findByValue(iprot.readI32());
+      struct.gender = me.tony.practice.common.thrift.Gender.findByValue(iprot.readI32());
       struct.setGenderIsSet(true);
       struct.usercode = iprot.readString();
       struct.setUsercodeIsSet(true);
