@@ -10,7 +10,7 @@ import java.lang.reflect.Proxy;
 public class ProxyTest {
     @Test
     public void testProxy() {
-        MyServiceHandler handler = new MyServiceHandler();
+        MyServiceHandler handler = new MyServiceHandler(new MyServiceImpl());
         MyService service = (MyService) Proxy.newProxyInstance(MyService.class.getClassLoader(), new Class<?>[]{MyService.class}, handler);
         System.out.println(service.func1());
         System.out.println(service.func2());
