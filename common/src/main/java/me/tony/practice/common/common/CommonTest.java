@@ -3,10 +3,11 @@ package me.tony.practice.common.common;
 import me.tony.practice.common.Base;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
@@ -48,6 +49,41 @@ public class CommonTest extends Base {
         List<String> collect = strings.stream().collect(Collectors.toMap(a -> a, a -> 1, (a, b) -> a + b))
                 .entrySet().stream().filter(e -> e.getValue() > 1).map(Map.Entry::getKey).collect(Collectors.toList());
         collect.forEach(System.out::println);
+    }
+
+    @Test
+    public void testMod() {
+        System.out.println(-3 % 4);
+    }
+
+    @Test
+    public void testSubString() {
+        String host = "http://staging.max.ad.xiaomi.srv/";
+        System.out.println(host.substring(0, host.length() - 1));
+
+        String str = "a";
+        System.out.println(str.substring(0, str.length() - 1));
+
+        String empty = "";
+        System.out.println(empty.substring(0, empty.length() - 1));
+    }
+
+    @Test
+    public void getTimestamp() {
+        LocalDateTime start = LocalDateTime.of(2017, 8, 31, 15, 59, 59);
+        LocalDateTime end = LocalDateTime.of(2017, 8, 31, 17, 0, 1);
+        System.out.println(Date.from(start.atZone(ZoneId.systemDefault()).toInstant()).getTime());
+        System.out.println(Date.from(end.atZone(ZoneId.systemDefault()).toInstant()).getTime());
+    }
+
+    @Test
+    public void timestamp() {
+        LocalDateTime now = LocalDateTime.now();
+        long nowL = System.currentTimeMillis();
+        Instant nowI = Instant.now();
+        System.out.println(now.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli());
+        System.out.println(nowL);
+        System.out.println(nowI.toEpochMilli());
     }
 
     static class A {

@@ -16,6 +16,7 @@
         <module>validate</module>
         <module>rules</module>
         <module>service-discovery</module>
+        <module>spring-boot</module>
     </modules>
 
     <dependencyManagement>
@@ -190,6 +191,12 @@
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-databind</artifactId>
                 <version>2.9.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpcomponents-core</artifactId>
+                <version>4.3.1</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
