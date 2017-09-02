@@ -7,7 +7,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>spring-webflow</artifactId>
-    <packaging>war</packaging>
+    <!--<packaging>war</packaging>-->
     <name>spring-webflow</name>
     <url>http://maven.apache.org</url>
     <dependencies>
