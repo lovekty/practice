@@ -6,7 +6,6 @@ import org.junit.Test;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.time.ZoneOffset;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -86,6 +85,16 @@ public class CommonTest extends Base {
         System.out.println(nowI.toEpochMilli());
     }
 
+    @Test
+    public void testHashCode() {
+        Foo f1 = new Foo(1, "haha");
+        Foo f2 = new Foo(1, "haha");
+        System.out.println(f1.hashCode());
+        System.out.println(f2.hashCode());
+        System.out.println(System.identityHashCode(f1));
+        System.out.println(System.identityHashCode(f2));
+    }
+
     static class A {
         Integer integer = null;
 
@@ -101,5 +110,29 @@ public class CommonTest extends Base {
 
     static class D {
 
+    }
+
+    static class Foo {
+        int id;
+        String name;
+
+        public Foo(int id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (!(o instanceof Foo)) return false;
+            Foo foo = (Foo) o;
+            return id == foo.id &&
+                    Objects.equals(name, foo.name);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(id, name);
+        }
     }
 }
