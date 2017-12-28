@@ -64,6 +64,10 @@
             <!--<groupId>org.apache.httpcomponents</groupId>-->
             <!--<artifactId>httpcomponents-core</artifactId>-->
         <!--</dependency>-->
+        <dependency>
+            <groupId>net.sf.json-lib</groupId>
+            <artifactId>json-lib</artifactId>
+        </dependency>
     </dependencies>
 
 

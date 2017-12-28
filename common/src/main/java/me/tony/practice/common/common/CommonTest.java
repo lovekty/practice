@@ -135,4 +135,27 @@ public class CommonTest extends Base {
             return Objects.hash(id, name);
         }
     }
+
+    static class TestCons{
+
+        String str;
+        Integer index;
+        Object obj;
+
+        public TestCons() {
+            this((String) null);
+        }
+
+        public TestCons(String str) {
+            this.str = str;
+        }
+
+        public TestCons(Integer index) {
+            this.index = index;
+        }
+
+        public TestCons(Object obj) {
+            this.obj = obj;
+        }
+    }
 }

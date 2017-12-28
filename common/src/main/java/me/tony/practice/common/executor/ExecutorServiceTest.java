@@ -4,11 +4,23 @@ import org.junit.Test;
 
 import java.util.Random;
 import java.util.Scanner;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 public class ExecutorServiceTest {
+
+    public static void main(String[] args) {
+        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        Future<String> result = executorService.submit(new Mission(499));
+        long start = System.nanoTime();
+        try {
+            String s = result.get(500, TimeUnit.MILLISECONDS);
+            System.out.println("end sign:" + s);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("duration in nanosec:" + (System.nanoTime() - start));
+        }
+    }
 
     @Test
     public void test() {
@@ -23,5 +35,25 @@ public class ExecutorServiceTest {
         }, 5, 5, TimeUnit.SECONDS);
         Scanner scanner = new Scanner(System.in);
         String end = scanner.nextLine();
+    }
+
+    static class Mission implements Callable<String> {
+
+        private long tts;
+
+        public Mission(long tts) {
+            this.tts = tts;
+        }
+
+        @Override
+        public String call() throws Exception {
+            try {
+                Thread.sleep(tts);
+                System.out.println("mission done");
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            return "done";
+        }
     }
 }
