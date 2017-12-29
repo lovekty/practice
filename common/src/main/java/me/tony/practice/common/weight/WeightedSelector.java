@@ -62,7 +62,7 @@ public class WeightedSelector {
             tmpConfigMap.put(tagId, new TreeMap<>());
             entry.getValue().forEach(pair -> {
                 double lastWeight = tmpConfigMap.get(tagId).size() == 0 ? 0 : tmpConfigMap.get(tagId).lastKey().doubleValue();//统一转为double
-                tmpConfigMap.get(tagId).put(pair.getFirst() + lastWeight, pair.getValue());//权重累加
+                tmpConfigMap.get(tagId).put(pair.getFirst() + lastWeight, pair.getSecond());//权重累加
             });
 
         });
