@@ -4,7 +4,7 @@ import org.apache.commons.math3.util.Pair;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
 
 import static me.tony.practice.common.weight.TrafficRule.exclusive;
@@ -59,8 +59,8 @@ public class WeightedSelector {
         final Map<String, NavigableMap<Double, List<String>>> tmpConfigMap = new ConcurrentHashMap<>();
         dataMap.entrySet().parallelStream().forEach(entry -> {
             String tagId = entry.getKey();
-            tmpConfigMap.put(tagId, new TreeMap<>());
-            entry.getValue().forEach(pair -> {
+            tmpConfigMap.put(tagId, new ConcurrentSkipListMap<>());
+            entry.getValue().parallelStream().forEach(pair -> {
                 double lastWeight = tmpConfigMap.get(tagId).size() == 0 ? 0 : tmpConfigMap.get(tagId).lastKey().doubleValue();//统一转为double
                 tmpConfigMap.get(tagId).put(pair.getFirst() + lastWeight, pair.getSecond());//权重累加
             });
@@ -75,10 +75,10 @@ public class WeightedSelector {
         if (!configMap.containsKey(tagId)) {
             return Collections.emptyList();
         }
-        NavigableMap<Double, List<String>> treeMap = configMap.get(tagId);
-        double randomWeight = treeMap.lastKey() * random.nextDouble();
-        SortedMap<Double, List<String>> tailMap = treeMap.tailMap(randomWeight, false);
-        return treeMap.get(tailMap.firstKey());
+        NavigableMap<Double, List<String>> weightedConfig = configMap.get(tagId);
+        double randomWeight = weightedConfig.lastKey() * random.nextDouble();
+        NavigableMap<Double, List<String>> tailMap = weightedConfig.tailMap(randomWeight, false);
+        return weightedConfig.get(tailMap.firstKey());
     }
 }
 
