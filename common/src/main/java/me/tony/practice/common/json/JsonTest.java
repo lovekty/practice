@@ -1,6 +1,6 @@
 package me.tony.practice.common.json;
 
-import net.sf.json.JSONObject;
+//import net.sf.json.JSONObject;
 import org.codehaus.jackson.JsonParser;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.type.TypeReference;
@@ -28,14 +28,14 @@ public class JsonTest {
         }
     }
 
-    @Test
-    public void testJson() {
-        JSONObject p = new JSONObject();
-        JSONObject c = new JSONObject();
-        p.put("code", 0);
-        c.put("ck", "cv");
-        p.put("data", c);
-        p.getJSONObject("data").put("foo", "bar");
-        System.out.println(p);
-    }
+//    @Test
+//    public void testJson() {
+//        JSONObject p = new JSONObject();
+//        JSONObject c = new JSONObject();
+//        p.put("code", 0);
+//        c.put("ck", "cv");
+//        p.put("data", c);
+//        p.getJSONObject("data").put("foo", "bar");
+//        System.out.println(p);
+//    }
 }
