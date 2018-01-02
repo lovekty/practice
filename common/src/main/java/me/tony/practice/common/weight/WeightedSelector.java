@@ -1,6 +1,7 @@
 package me.tony.practice.common.weight;
 
-import org.apache.commons.math3.util.Pair;
+
+import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
@@ -59,10 +60,10 @@ public class WeightedSelector {
         final Map<String, NavigableMap<Double, List<String>>> tmpConfigMap = new ConcurrentHashMap<>();
         dataMap.entrySet().parallelStream().forEach(entry -> {
             String tagId = entry.getKey();
-            tmpConfigMap.put(tagId, new ConcurrentSkipListMap<>());
-            entry.getValue().parallelStream().forEach(pair -> {
-                double lastWeight = tmpConfigMap.get(tagId).size() == 0 ? 0 : tmpConfigMap.get(tagId).lastKey().doubleValue();//统一转为double
-                tmpConfigMap.get(tagId).put(pair.getFirst() + lastWeight, pair.getSecond());//权重累加
+            tmpConfigMap.put(tagId, new TreeMap<>());
+            entry.getValue().forEach(pair -> {
+                double lastWeight = tmpConfigMap.get(tagId).size() == 0 ? 0 : tmpConfigMap.get(tagId).lastKey().doubleValue();
+                tmpConfigMap.get(tagId).put(pair.getLeft() + lastWeight, pair.getRight());
             });
 
         });
@@ -97,7 +98,7 @@ class TrafficRuleService {
             double totalExclusiveRate = 0.0;
             for (TrafficRule tr : entry.getValue()) {
                 if (tr.exclusive) {
-                    Pair<Double, List<String>> exclusiveOne = new Pair<>(tr.weight, Collections.singletonList(tr.dspKey));
+                    Pair<Double, List<String>> exclusiveOne = Pair.of(tr.weight, Collections.singletonList(tr.dspKey));
                     weightedTargets.add(exclusiveOne);
                     totalExclusiveRate += tr.weight;
                 } else {
@@ -105,7 +106,7 @@ class TrafficRuleService {
                 }
             }
             if (totalExclusiveRate < 1 && !nonExclusiveTargets.isEmpty()) {
-                weightedTargets.add(new Pair<>(1 - totalExclusiveRate, nonExclusiveTargets));
+                weightedTargets.add(Pair.of(1 - totalExclusiveRate, nonExclusiveTargets));
             }
         });
         return ret;
