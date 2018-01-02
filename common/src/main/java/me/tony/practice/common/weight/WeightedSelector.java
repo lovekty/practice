@@ -5,7 +5,6 @@ import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
 
 import static me.tony.practice.common.weight.TrafficRule.exclusive;
@@ -57,16 +56,15 @@ public class WeightedSelector {
         if (dataMap.isEmpty()) {
             return;
         }
-        final Map<String, NavigableMap<Double, List<String>>> tmpConfigMap = new ConcurrentHashMap<>();
-        dataMap.entrySet().parallelStream().forEach(entry -> {
-            String tagId = entry.getKey();
-            tmpConfigMap.put(tagId, new TreeMap<>());
-            entry.getValue().forEach(pair -> {
-                double lastWeight = tmpConfigMap.get(tagId).size() == 0 ? 0 : tmpConfigMap.get(tagId).lastKey().doubleValue();
-                tmpConfigMap.get(tagId).put(pair.getLeft() + lastWeight, pair.getRight());
-            });
-
-        });
+        Map<String, NavigableMap<Double, List<String>>> tmpConfigMap = dataMap.entrySet().parallelStream()
+                .collect(Collectors.toConcurrentMap(Map.Entry::getKey, entry -> {
+                    final NavigableMap<Double, List<String>> weightedMap = new TreeMap<>();
+                    entry.getValue().forEach(pair -> {
+                        double lastWeight = weightedMap.size() == 0 ? 0 : weightedMap.lastKey();
+                        weightedMap.put(pair.getLeft() + lastWeight, pair.getRight());
+                    });
+                    return Collections.unmodifiableNavigableMap(weightedMap);
+                }));
         if (!tmpConfigMap.isEmpty()) {
             configMap = tmpConfigMap;
         }
