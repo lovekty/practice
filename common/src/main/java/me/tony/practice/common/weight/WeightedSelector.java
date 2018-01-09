@@ -28,7 +28,7 @@ public class WeightedSelector {
         );
         WeightedSelector selector = new WeightedSelector();
         selector.refresh(data);
-        int total = 10000000;
+        int total = 100000000;
         int aNum, bNum, gNum, bidNum;
         aNum = bNum = gNum = bidNum = 0;
         long start = System.currentTimeMillis();
@@ -59,8 +59,12 @@ public class WeightedSelector {
         Map<String, NavigableMap<Double, List<String>>> tmpConfigMap = dataMap.entrySet().parallelStream()
                 .collect(Collectors.toConcurrentMap(Map.Entry::getKey, entry -> {
                     final NavigableMap<Double, List<String>> weightedMap = new TreeMap<>();
+                    // never never use parallelStream instead
+                    // for weightedMap is changed in each step
+                    // and will effect next step
+                    // so call side effect
                     entry.getValue().forEach(pair -> {
-                        double lastWeight = weightedMap.size() == 0 ? 0 : weightedMap.lastKey();
+                        double lastWeight = weightedMap.isEmpty() ? 0 : weightedMap.lastKey();
                         weightedMap.put(pair.getLeft() + lastWeight, pair.getRight());
                     });
                     return Collections.unmodifiableNavigableMap(weightedMap);

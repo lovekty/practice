@@ -10,15 +10,20 @@ public class ExecutorServiceTest {
 
     public static void main(String[] args) {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
-        Future<String> result = executorService.submit(new Mission(1000));
-        long start = System.nanoTime();
+        Future<String> result = executorService.submit(new Mission(499));
+        try {
+            Thread.sleep(500);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        long start = System.currentTimeMillis();
         try {
             String s = result.get(500, TimeUnit.MILLISECONDS);
             System.out.println("end sign:" + s);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            System.out.println("duration in nanosec:" + (System.nanoTime() - start));
+            System.out.println("duration in millisec:" + (System.currentTimeMillis() - start));
         }
     }
 

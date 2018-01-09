@@ -10,6 +10,7 @@ public class ForkJoinPoolTest {
     public static void main(String[] args) {
         ForkJoinPool pool = new ForkJoinPool(2);
         final long start = System.currentTimeMillis();
+
         String result = pool.invoke(new FetchResultJob(Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0)));
         System.out.println("duration:" + (System.currentTimeMillis() - start));
         System.out.println(result);
